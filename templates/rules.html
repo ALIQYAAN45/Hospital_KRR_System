@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical KRR - Hospital KRR System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Hospital KRR System</div>
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}">Dashboard</a>
+            <a href="{{ url_for('patients') }}">Patients</a>
+            <a href="{{ url_for('doctors') }}">Doctors</a>
+            <a href="{{ url_for('beds') }}">Beds</a>
+        </div>
+    </nav>
+
+    <main class="main-container">
+        <section class="welcome-section">
+            <h1>Medical Knowledge Reasoning</h1>
+            <p>Select reported symptoms. The system applies predefined educational rules.</p>
+        </section>
+
+        <section class="data-section">
+            <h2 class="form-title">Select Symptoms</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <p class="flash-message {{ category }}">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" class="patient-form">
+                <label class="symptom-option"><input type="checkbox" name="symptoms" value="fever"> Fever</label>
+                <label class="symptom-option"><input type="checkbox" name="symptoms" value="cough"> Cough</label>
+                <label class="symptom-option"><input type="checkbox" name="symptoms" value="headache"> Headache</label>
+                <label class="symptom-option"><input type="checkbox" name="symptoms" value="vomiting"> Vomiting</label>
+                <label class="symptom-option"><input type="checkbox" name="symptoms" value="chest pain"> Chest pain</label>
+                <label class="symptom-option"><input type="checkbox" name="symptoms" value="sore throat"> Sore throat</label>
+                <label class="symptom-option"><input type="checkbox" name="symptoms" value="abdominal pain"> Abdominal pain</label>
+                <button type="submit" class="form-button">Analyze Symptoms</button>
+            </form>
+        </section>
+
+        <section class="data-section">
+            <h2 class="form-title">Medical Knowledge Base</h2>
+            <p>
+                Rules are checked from Priority 1 downward. The first matching
+                rule is used for the educational recommendation.
+            </p>
+
+            <ol class="knowledge-base-list">
+                {% for rule in medical_rules %}
+                    <li>
+                        <strong>Priority {{ loop.index }} &mdash; {{ rule["matched_rule"] }}</strong>
+                        <p>{{ rule["rule"] }}</p>
+                    </li>
+                {% endfor %}
+            </ol>
+        </section>
+    </main>
+
+    <footer class="footer"><p>&copy; 2026 Hospital KRR System</p></footer>
+</body>
+</html>

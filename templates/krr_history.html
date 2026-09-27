@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KRR Assessment History - Hospital KRR System</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+
+        <div class="logo">
+            Hospital KRR System
+        </div>
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('index') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('rules') }}">
+                Medical KRR
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Main Content -->
+    <main class="main-container">
+
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+
+            <h1>KRR Assessment History</h1>
+
+            <p>
+                Educational KRR assessments are shown newest first.
+                No patient identifiers are stored here.
+            </p>
+
+        </section>
+
+
+        <!-- Search Section -->
+        <section class="data-section">
+
+            <h2>Search Assessment History</h2>
+
+            <form
+                method="GET"
+                action="{{ url_for('krr_history') }}"
+                class="search-form"
+            >
+
+                <input
+                    type="text"
+                    name="q"
+                    placeholder="Search fever, chest pain, or rule..."
+                    value="{{ query }}"
+                >
+
+                <button type="submit">
+                    Search
+                </button>
+
+                {% if query %}
+
+                    <a href="{{ url_for('krr_history') }}">
+                        Clear Search
+                    </a>
+
+                {% endif %}
+
+            </form>
+
+        </section>
+
+
+        <!-- Assessment History Table -->
+        <section class="data-section">
+
+            {% if assessments %}
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Date and Time</th>
+
+                                <th>Selected Symptoms</th>
+
+                                <th>Matched Rule</th>
+
+                                <th>Educational Recommendation</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for assessment in assessments %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ assessment["created_at"] }}
+                                    </td>
+
+                                    <td>
+                                        {{ assessment["symptoms"] | title }}
+                                    </td>
+
+                                    <td>
+                                        {{ assessment["matched_rule"] }}
+                                    </td>
+
+                                    <td>
+                                        {{ assessment["recommendation"] }}
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-message">
+
+                    {% if query %}
+
+                        No assessments found for "{{ query }}".
+
+                    {% else %}
+
+                        No educational KRR assessments have been saved yet.
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+
+        <p>
+            &copy; 2026 Hospital KRR System
+        </p>
+
+    </footer>
+
+</body>
+</html>

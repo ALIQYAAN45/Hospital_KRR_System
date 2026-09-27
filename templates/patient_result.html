@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reasoning Result - Hospital KRR System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+
+        <div class="logo">
+            Hospital KRR System
+        </div>
+
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}">Dashboard</a>
+            <a href="{{ url_for('patients') }}">Patients</a>
+            <a href="{{ url_for('doctors') }}">Doctors</a>
+            <a href="{{ url_for('beds') }}">Beds</a>
+            <a href="{{ url_for('rules') }}">Medical KRR</a>
+        </div>
+
+    </nav>
+
+
+    <main class="main-container">
+
+        <section class="welcome-section">
+
+            <h1>Knowledge-Based Reasoning Result</h1>
+
+            <p>
+                The system analyzed the entered patient information
+                using predefined medical rules.
+            </p>
+
+        </section>
+
+
+        <section class="data-section reasoning-result">
+
+            <div class="result-icon">
+                🧠
+            </div>
+
+            <h2>Entered Symptoms</h2>
+
+            <p>{{ symptoms | join(', ') | title }}</p>
+
+            <hr>
+
+            <h2>Matched Rule</h2>
+
+            <p class="matched-rule">{{ matched_rule }}</p>
+
+            <h2>Reason for the Match</h2>
+
+            <p>{{ match_reason }}</p>
+
+            <h2>IF&ndash;THEN Explanation</h2>
+
+            <p class="matched-rule">{{ if_then_explanation }}</p>
+
+            <h2>Reasoning Trace</h2>
+
+            <p>
+                Rules are evaluated in priority order. The first matching rule
+                is selected for the educational recommendation.
+            </p>
+
+            <div class="reasoning-trace">
+                {% for trace_item in evaluation_trace %}
+                    <div class="trace-item {{ trace_item['status_class'] }}">
+                        <strong>
+                            Priority {{ trace_item["priority"] }} &mdash;
+                            {{ trace_item["matched_rule"] }}
+                        </strong>
+                        <p>{{ trace_item["rule"] }}</p>
+                        <span class="trace-status">{{ trace_item["status"] }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <h2>Possible Recommendation</h2>
+
+            <div class="recommendation-box">
+                {{ recommendation }}
+            </div>
+
+            <p class="warning-text">
+                This is an educational rule-based recommendation,
+                not a medical diagnosis.
+            </p>
+
+            <div class="result-actions">
+
+                <a href="{{ url_for('rules') }}"
+                   class="card-button">
+                    Analyze Other Symptoms
+                </a>
+
+                <a href="{{ url_for('krr_history') }}"
+                   class="small-button">
+                    View Assessment History
+                </a>
+
+                <a href="{{ url_for('index') }}"
+                   class="small-button">
+                    Go to Dashboard
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer class="footer">
+        <p>
+            © 2026 Hospital KRR System
+        </p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Patients - Hospital KRR System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+
+        <div class="logo">
+            Hospital KRR System
+        </div>
+
+        <div class="nav-links">
+            <a href="{{ url_for('index') }}">Dashboard</a>
+            <a href="{{ url_for('patients') }}">Patients</a>
+            <a href="{{ url_for('doctors') }}">Doctors</a>
+            <a href="{{ url_for('beds') }}">Beds</a>
+        </div>
+
+    </nav>
+
+
+    <!-- Main Content -->
+    <main class="main-container">
+
+        <section class="welcome-section">
+            <h1>Patient Management</h1>
+
+            <p>
+                Register and manage hospital patient records.
+            </p>
+        </section>
+
+
+        <!-- Patient Registration Form -->
+        <section class="data-section">
+
+            <h2 class="form-title">Register New Patient</h2>
+
+            <form method="POST" class="patient-form">
+
+                <div class="form-group">
+                    <label for="name">Patient Name</label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter patient name"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="age">Age</label>
+
+                    <input
+                        type="number"
+                        id="age"
+                        name="age"
+                        placeholder="Enter age"
+                        min="1"
+                        max="120"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+
+                    <select id="gender" name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Enter 10-digit phone number"
+                        pattern="[0-9]{10}"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="disease">Disease / Problem</label>
+
+                    <input
+                        type="text"
+                        id="disease"
+                        name="disease"
+                        placeholder="Enter disease or problem"
+                        required
+                    >
+                </div>
+
+
+                <button type="submit" class="form-button">
+                    Register Patient
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- Patient Records -->
+        <section class="data-section">
+
+            <div class="section-heading">
+
+                <h2>Patient Records</h2>
+
+                <span class="record-count">
+                    Total Patients: {{ patients|length }}
+                </span>
+
+            </div>
+
+
+            {% if patients %}
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                            <th>Phone</th>
+                            <th>Disease</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for patient in patients %}
+
+                        <tr>
+                            <td>{{ patient["id"] }}</td>
+                            <td>{{ patient["name"] }}</td>
+                            <td>{{ patient["age"] }}</td>
+                            <td>{{ patient["gender"] }}</td>
+                            <td>{{ patient["phone"] }}</td>
+                            <td>{{ patient["disease"] }}</td>
+
+                            <td>
+                                <form
+                                    method="POST"
+                                    action="{{ url_for('delete_patient', patient_id=patient['id']) }}"
+                                    style="display: inline;"
+                                    onsubmit="return confirm('Delete this patient?');"
+                                >
+                                    <button type="submit" class="delete-button">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-message">
+                No patients registered yet.
+            </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>
+            © 2026 Hospital KRR System
+        </p>
+    </footer>
+
+</body>
+</html>
